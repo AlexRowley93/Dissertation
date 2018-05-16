@@ -23,12 +23,39 @@ exports.getMapDataModel = async (params) => {
             query += `AND CrimeType = "${params.crimeType}" `;
         }
 
-        console.log(query);
+        let returnResponse = {
+            "type":"FeatureCollection",
+        };
 
 
         db.executeQuery(query)
             .then(response => {
-                resolve(response)
+
+                let locations = [];
+
+                response.forEach(location => {
+
+                    let template = {
+                        "type":"Feature",
+                        "properties":{},
+                        "geometry":{
+                            "type":"Point",
+                            "coordinates":[]
+                        }
+                    };
+
+                    if(location.Longitude && location.Latitude){
+                        template.properties = {
+                            "ReportedBy": location.ReportedBy,
+                            "location": location.Location,
+                            "CrimeType": location.CrimeType
+                        };
+                        template.geometry.coordinates = [location.Longitude, location.Latitude, 0];
+                        locations.push(template)
+                    }
+                });
+                returnResponse.features = locations;
+                resolve(returnResponse)
             })
             .catch(err => {
                 reject(err);

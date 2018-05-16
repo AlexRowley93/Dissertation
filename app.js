@@ -11,10 +11,14 @@ app.use(cors());
 
 //Import routes
 const getMapData = require("./resources/map-data/get-map-data-route");
+const getLocationData = require("./resources/location-data/location-route");
+const getCrimeTypes = require("./resources/crime-type-data/crime-type-route");
 
 
 //Listen on routes
-app.use('/', getMapData);
+app.use('/map', getMapData);
+app.use('/locations', getLocationData);
+app.use('/crime-type', getCrimeTypes);
 
 
 app.listen(4000, done => {
