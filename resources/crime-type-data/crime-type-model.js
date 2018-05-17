@@ -7,11 +7,13 @@ const db = require('../../helpers/db-helper');
  */
 exports.getCrimeTypes = () => {
 
-
+    // Return a new promise
     return new Promise((resolve, reject) => {
 
+        // Define the SQL query
         let query = `SELECT crime FROM CrimeType`;
 
+        // Call the DB helper to execute the query
         db.executeQuery(query)
             .then(response => {
 
@@ -20,9 +22,11 @@ exports.getCrimeTypes = () => {
 
                 //Iterate over the response and add just the crime type data to the response array
                 response.forEach(type => {
+                    // Push crime types into the array
                     crimeTypes.push(type["crime"]);
                 });
 
+                // Return the array
                 resolve(crimeTypes);
             })
             .catch(err => {
